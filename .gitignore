@@ -1,0 +1,51 @@
+# secrets — never commit
+.env
+*.key
+
+# node
+catapp/node_modules/
+
+# android build artifacts
+catapp/android/.gradle/
+catapp/android/build/
+catapp/android/app/build/
+catapp/android/capacitor-cordova-android-plugins/
+catapp/android/local.properties
+.gradle/
+
+# built apks (attach to GitHub releases instead)
+*.apk
+
+# python
+__pycache__/
+*.pyc
+
+# os
+Thumbs.db
+.DS_Store
+
+# build output (packs published to GitHub Releases instead)
+game/dist/
+game/packs/
+
+# --- book content: NEVER publish (only encrypted .kir packs go to Releases) ---
+/*.png
+game/assets/
+game/text/
+game/BOOK*.md
+game/STORY.md
+game/book1.html
+game/book2.html
+game/demo.html
+game/catalog.json
+game/tools/book*_prompts.json
+catapp/www/assets/
+catapp/www/book1.html
+catapp/www/book2.html
+catapp/www/catalog.json
+game/tools/*_prompts.txt
+
+# decryption-key-bearing files — keep OUT of the public repo (still on disk locally)
+game/reader.html
+game/tools/pack_books.mjs
+catapp/www/

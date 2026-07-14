@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>איש החתול — הספרים</title>
+<script src="kirou-analytics.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Suez+One&display=swap');
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:'Rubik',sans-serif;background:#dfe4ef;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:16px}
+.phone{width:340px;height:auto;min-height:660px;background:#181425;border-radius:38px;padding:12px;box-shadow:0 10px 0 #0d0b16}
+.screen{background:#eef2f8;min-height:636px;border-radius:26px;padding:16px 14px;display:flex;flex-direction:column;gap:14px}
+.head{text-align:center}
+.head .logo{font-family:'Suez One';font-size:30px;color:#20202a;line-height:1.1}
+.head .sub{font-size:14px;color:#5a5670;margin-top:2px}
+.card{display:block;text-decoration:none;color:inherit;background:#fff;border:3px solid #20202a;border-radius:16px;overflow:hidden;box-shadow:0 5px 0 #20202a;transition:transform .12s,box-shadow .12s}
+.card:active{transform:translateY(4px);box-shadow:0 1px 0 #20202a}
+.cover{height:150px;background-size:cover;background-position:center 30%;position:relative;display:flex;align-items:flex-end}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(20,16,34,.78) 0%,rgba(20,16,34,.05) 55%)}
+.btitle{position:relative;z-index:2;font-family:'Suez One';font-size:20px;color:#fff;padding:10px 14px;text-shadow:0 2px 6px #000;line-height:1.15}
+.bbody{padding:11px 14px 14px}
+.bsum{font-size:14px;line-height:1.7;color:#2c2740;margin:0 0 12px}
+.pbar{height:12px;background:#e4e6ee;border:2px solid #20202a;border-radius:8px;overflow:hidden}
+.pfill{height:100%;background:#12b26a;width:0;transition:width .4s}
+.plabel{font-size:12px;font-weight:500;color:#5a5670;margin-top:5px;text-align:left}
+.foot{text-align:center;font-size:11px;color:#8a8698;margin-top:auto}
+.screen{position:relative}
+.gear{position:absolute;top:10px;left:10px;z-index:20;width:40px;height:40px;border-radius:50%;background:#20202a;color:#fff;border:none;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 #0d0b16}
+.gear:active{transform:translateY(2px);box-shadow:0 1px 0 #0d0b16}
+.settings{position:absolute;inset:0;z-index:30;background:rgba(20,16,34,.82);display:none;flex-direction:column;align-items:center;justify-content:center;padding:18px;border-radius:26px}
+.settings.show{display:flex}
+.scard{background:#fff;border-radius:16px;padding:18px;width:100%;max-width:272px;display:flex;flex-direction:column;gap:16px}
+.stitle{font-family:'Suez One';font-size:20px;color:#20202a;text-align:center}
+.srow{border:2px solid #20202a;border-radius:14px;padding:12px}
+.slabel{font-weight:700;font-size:15px;color:#20202a;margin-bottom:9px}
+.seg{display:flex;border:2px solid #20202a;border-radius:10px;overflow:hidden}
+.seg button{flex:1;border:none;background:#fff;padding:9px 0;font-family:'Rubik';font-weight:700;font-size:14px;color:#20202a;cursor:pointer}
+.seg button.on{background:#4FA3E3;color:#fff}
+.stog{display:flex;align-items:center;justify-content:space-between}
+.stog .slabel{margin:0}
+.switch{width:56px;height:32px;border-radius:20px;background:#c7ccd8;border:2px solid #20202a;position:relative;cursor:pointer}
+.switch.on{background:#12b26a}
+.knob{position:absolute;top:2px;right:2px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #20202a}
+.switch.on .knob{right:auto;left:2px}
+.snote{font-size:11px;color:#7a7690;margin-top:8px;line-height:1.5}
+.sclose{width:100%;font-weight:700;background:#20202a;color:#fff;border:none;border-radius:12px;padding:10px;cursor:pointer;font-family:'Rubik';font-size:15px}
+.donlink{display:flex;align-items:center;gap:9px;text-decoration:none;color:#20202a;font-weight:700;font-size:14px;padding:9px 11px;border:2px solid #20202a;border-radius:10px;margin-bottom:8px;background:#f4f6fb}
+.donlink:last-of-type{margin-bottom:0}
+.donlink:active{transform:translateY(1px)}
+.donlink .flag{font-size:20px;line-height:1}
+#library{display:flex;flex-direction:column;gap:14px}
+.cardactions{display:flex;gap:8px;margin-top:11px}
+.btn{font-family:'Rubik';font-weight:700;font-size:14px;border:2px solid #20202a;border-radius:10px;padding:10px 0;cursor:pointer;box-shadow:0 3px 0 #20202a}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 #20202a}
+.btn[disabled]{opacity:.55;cursor:default;box-shadow:0 3px 0 #20202a}
+.btn-read{flex:1;background:#12b26a;color:#fff}
+.btn-dl{flex:1;background:#FFD645;color:#4a3400}
+.btn-rm{flex:0 0 48px;background:#fff;color:#c0392b;font-size:17px}
+.lempty{text-align:center;color:#7a7690;font-size:14px;padding:30px 10px}
+.lspin{display:inline-block;width:15px;height:15px;border:3px solid rgba(0,0,0,.18);border-top-color:#4a3400;border-radius:50%;animation:lspin .8s linear infinite;vertical-align:-2px;margin-inline-end:6px}
+@keyframes lspin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<div class="phone">
+  <div class="screen">
+    <button class="gear" id="gear" aria-label="settings">⚙️</button>
+    <div class="head">
+      <div class="logo">אִישׁ הֶחָתוּל</div>
+      <div class="sub">בְּחַרוּ סֵפֶר וְהַתְחִילוּ לִקְרֹא</div>
+    </div>
+
+    <div id="library"><div class="lempty" id="lempty"></div></div>
+
+    <div class="foot">אִישׁ הֶחָתוּל · סִפְרֵי קְרִיאָה לְיֶלֶד</div>
+    <div class="settings" id="settings"><div class="scard">
+      <div class="stitle" id="setTitle">הַגְדָּרוֹת</div>
+      <div class="srow"><div class="slabel" id="langLabel">שָׂפָה</div><div class="seg"><button id="segHe" class="on">עברית</button><button id="segEn">English</button></div></div>
+      <div class="srow"><div class="stog"><div class="slabel" id="ttsLabel">הַקְרָאָה</div><div class="switch" id="ttsSw"><div class="knob"></div></div></div><div class="snote" id="ttsNote"></div></div>
+      <div class="srow"><div class="slabel" id="donLabel">תְּמִיכָה</div>
+        <a class="donlink" id="donIL" href="https://links.payboxapp.com/OeINrHUuL4b" target="_blank" rel="noopener"><span class="flag">🇮🇱</span><span id="donILtxt">תשלום באמצעות פייבוקס</span></a>
+        <a class="donlink" id="donUS" href="https://venmo.com/code?user_id=2145057738063872116&created=1784025960" target="_blank" rel="noopener"><span class="flag">🇺🇸</span><span id="donUStxt">תשלום באמצעות וונמו</span></a>
+        <div class="snote" id="donNote"></div></div>
+      <button class="sclose" id="setClose">סְגֹר</button>
+    </div></div>
+  </div>
+</div>
+<script>
+(function(){
+  var CATALOG_BASE='https://github.com/sdagan/KirOu/releases/download/books-v1/';
+  var CATALOG_URL=CATALOG_BASE+'catalog.json';
+  var LANG=(localStorage.getItem('cm_lang')||'he');
+  var TTS=(localStorage.getItem('cm_tts')!=='0');
+  var L={
+    he:{logo:'KirOu',sub:'הַסִּפְרִיָּה שֶׁלִּי',foot:'KirOu · סִפְרֵי קְרִיאָה לִילָדִים',
+      setTitle:'הַגְדָּרוֹת',lang:'שָׂפָה',tts:'הַקְרָאָה',note:'לְהַקְרָאָה בְּעִבְרִית יֵשׁ לְהַתְקִין קוֹל עִבְרִי בַּמַּכְשִׁיר.',close:'סְגֹר',donTitle:'תְּמִיכָה',donIL:'תשלום באמצעות פייבוקס',donUS:'תשלום באמצעות וונמו',donNote:'הַכְּסָפִים יְשַׁמְּשׁוּ לְיִצִירַת סְפָרִים חֲדָשִׁים וְלִתְחְזוּקַת הָאַפְּלִיקַצְיָה.',
+      read:'קִרְאוּ',dl:'הוֹרָדָה',dling:'מוֹרִיד…',rm:'🗑',empty:'טוֹעֵן סְפָרִים…',noNet:'אֵין חִבּוּר. נַסּוּ שׁוּב מְאֻחָר יוֹתֵר.',dlErr:'הַהוֹרָדָה נִכְשְׁלָה',
+      pl:function(r,t){return 'עַמּוּד '+r+' מִתּוֹךְ '+t;},pn:function(t){return t+' עַמּוּדִים';}},
+    en:{logo:'KirOu',sub:'My library',foot:'KirOu · reading books for kids',
+      setTitle:'Settings',lang:'Language',tts:'Read aloud',note:'Read-aloud needs a matching voice installed on the device.',close:'Close',donTitle:'Support',donIL:'Pay via Paybox',donUS:'Pay via Venmo',donNote:'Funds go toward creating new books and app maintenance.',
+      read:'Read',dl:'Download',dling:'Downloading…',rm:'🗑',empty:'Loading books…',noNet:'No connection. Try again later.',dlErr:'Download failed',
+      pl:function(r,t){return 'Page '+r+' of '+t;},pn:function(t){return t+' pages';}},
+  };
+  function $(id){return document.getElementById(id);}
+  function tr(k){return L[LANG][k];}
+  function isNative(){try{return !!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());}catch(e){return false;}}
+  function FS(){try{var C=window.Capacitor;if(!C)return null;return (C.Plugins&&C.Plugins.Filesystem)||(C.registerPlugin&&C.registerPlugin('Filesystem'))||null;}catch(e){return null;}}
+  function getInstalled(){try{return JSON.parse(localStorage.getItem('kirou_installed')||'{}');}catch(e){return {};}}
+  function setInstalled(o){try{localStorage.setItem('kirou_installed',JSON.stringify(o));}catch(e){}}
+  function prog(){try{return JSON.parse(localStorage.getItem('cm_progress')||'{}');}catch(e){return {};}}
+  function bytesToB64(u8){var CH=0x8000,s='';for(var i=0;i<u8.length;i+=CH){s+=String.fromCharCode.apply(null,u8.subarray(i,i+CH));}return btoa(s);}
+
+  var CATALOG={books:[]};
+  async function getCatalog(){
+    try{var r=await fetch(CATALOG_URL,{cache:'no-store'});if(r.ok){var c=await r.json();localStorage.setItem('kirou_catalog',JSON.stringify(c));return c;}}catch(e){}
+    try{var cc=localStorage.getItem('kirou_catalog');if(cc)return JSON.parse(cc);}catch(e){}
+    try{var rl=await fetch('catalog.json');if(rl.ok)return await rl.json();}catch(e){}
+    try{var rb=await fetch('dist/catalog.json');if(rb.ok)return await rb.json();}catch(e){}
+    return {books:[],_offline:true};
+  }
+  function errStr(e){try{return (e&&(e.message||e.errorMessage||e.error))||JSON.stringify(e)||(''+e);}catch(x){return ''+e;}}
+  async function fsSize(id){try{var st=await FS().stat({path:'kirou/packs/'+id+'.kir',directory:'DATA'});return (st&&st.size)||0;}catch(e){return -1;}}
+  async function doDownload(id,pack,bytes,btn){
+    var s=L[LANG],url=CATALOG_BASE+pack;btn.disabled=true;btn.innerHTML='<span class="lspin"></span>'+s.dling;
+    function done(){var inst=getInstalled();inst[id]=true;setInstalled(inst);try{if(window.kirouTrack)kirouTrack('book_downloaded',{book:id});}catch(e){}render();}
+    function bad(sz){return bytes>0?(sz<bytes*0.5):(sz<1024);}
+    try{
+      if(isNative()&&FS()){
+        try{await FS().mkdir({path:'kirou/packs',directory:'DATA',recursive:true});}catch(e){}
+        var err1='';
+        try{await FS().downloadFile({url:url,path:'kirou/packs/'+id+'.kir',directory:'DATA'});}catch(e){err1='downloadFile: '+errStr(e);}
+        var sz=await fsSize(id);
+        if(bad(sz)){
+          // fallback: native fetch (CapacitorHttp) -> writeFile
+          var r=await fetch(url,{cache:'no-store'});if(!r.ok)throw new Error((err1||'')+' | fetch HTTP '+r.status);
+          var u8=new Uint8Array(await r.arrayBuffer());
+          if(!u8.length)throw new Error((err1||'downloadFile size '+sz)+' | fetch empty');
+          await FS().writeFile({path:'kirou/packs/'+id+'.kir',directory:'DATA',data:bytesToB64(u8)});
+          sz=await fsSize(id);
+          if(bad(sz))throw new Error('wrote '+sz+' bytes; '+(err1||''));
+        }
+        return done();
+      }else{
+        var r2=await fetch(url,{cache:'no-store'});if(!r2.ok)throw new Error('HTTP '+r2.status);await r2.arrayBuffer();
+        return done();
+      }
+    }catch(e){btn.disabled=false;btn.textContent=s.dlErr+': '+errStr(e);}
+  }
+  async function doRemove(id){
+    if(isNative()&&FS()){try{await FS().deleteFile({path:'kirou/packs/'+id+'.kir',directory:'DATA'});}catch(e){}}
+    var inst=getInstalled();delete inst[id];setInstalled(inst);
+    try{if(window.kirouTrack)kirouTrack('book_removed',{book:id});}catch(e){}
+    render();
+  }
+  function esc(t){return (t==null?'':''+t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function render(){
+    var s=L[LANG];
+    document.documentElement.lang=LANG;document.documentElement.dir=(LANG==='he')?'rtl':'ltr';
+    document.querySelector('.head .logo').textContent=s.logo;
+    document.querySelector('.head .sub').textContent=s.sub;
+    document.querySelector('.foot').textContent=s.foot;
+    $('setTitle').textContent=s.setTitle;$('langLabel').textContent=s.lang;$('ttsLabel').textContent=s.tts;$('ttsNote').textContent=s.note;$('setClose').textContent=s.close;
+    $('donLabel').textContent=s.donTitle;$('donILtxt').textContent=s.donIL;$('donUStxt').textContent=s.donUS;$('donNote').textContent=s.donNote;
+    $('segHe').classList.toggle('on',LANG==='he');$('segEn').classList.toggle('on',LANG==='en');
+    $('ttsSw').classList.toggle('on',TTS);
+    var lib=$('library'),inst=getInstalled(),pr=prog();
+    if(!CATALOG.books.length){lib.innerHTML='<div class="lempty">'+esc(CATALOG._offline?s.noNet:s.empty)+'</div>';return;}
+    lib.innerHTML=CATALOG.books.map(function(b){
+      var installed=!!inst[b.id],title=esc(b.title[LANG]||b.title.he),sum=esc(b.summary[LANG]||b.summary.he);
+      var p=pr[b.id]||{},reached=Math.min((p.max||0)+1,b.pages),started=(p.max>0||p.cur>0);
+      var mb=(b.bytes/1048576).toFixed(0);
+      var progHTML=installed?('<div class="pbar"><div class="pfill" style="width:'+Math.round(reached/b.pages*100)+'%"></div></div><div class="plabel">'+(started?s.pl(reached,b.pages):s.pn(b.pages))+'</div>'):'';
+      var actions=installed
+        ? '<div class="cardactions"><button class="btn btn-read" data-read="'+b.id+'">'+esc(s.read)+'</button><button class="btn btn-rm" data-rm="'+b.id+'" aria-label="remove">'+s.rm+'</button></div>'
+        : '<div class="cardactions"><button class="btn btn-dl" data-dl="'+b.id+'" data-pack="'+esc(b.pack)+'" data-bytes="'+(b.bytes||0)+'">'+esc(s.dl)+' · '+mb+'MB</button></div>';
+      return '<div class="card"><div class="cover" style="background-image:url(\''+b.cover+'\')"><div class="btitle">'+title+'</div></div>'
+        +'<div class="bbody"><p class="bsum">'+sum+'</p>'+progHTML+actions+'</div></div>';
+    }).join('');
+    [].forEach.call(lib.querySelectorAll('[data-read]'),function(el){el.onclick=function(){location.href='reader.html?id='+el.getAttribute('data-read');};});
+    [].forEach.call(lib.querySelectorAll('[data-dl]'),function(el){el.onclick=function(){doDownload(el.getAttribute('data-dl'),el.getAttribute('data-pack'),+el.getAttribute('data-bytes'),el);};});
+    [].forEach.call(lib.querySelectorAll('[data-rm]'),function(el){el.onclick=function(){doRemove(el.getAttribute('data-rm'));};});
+  }
+  $('gear').onclick=function(){$('settings').classList.add('show');};
+  $('setClose').onclick=function(){$('settings').classList.remove('show');};
+  $('segHe').onclick=function(){LANG='he';localStorage.setItem('cm_lang','he');render();};
+  $('segEn').onclick=function(){LANG='en';localStorage.setItem('cm_lang','en');render();};
+  $('ttsSw').onclick=function(){TTS=!TTS;localStorage.setItem('cm_tts',TTS?'1':'0');render();};
+  render();
+  getCatalog().then(function(c){CATALOG=c||{books:[]};render();});
+  try{if(window.kirouTrack)kirouTrack('app_opened',{lang:LANG});}catch(e){}
+})();
+</script>
+</body>
+</html>

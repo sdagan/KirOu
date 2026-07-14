@@ -1,0 +1,14 @@
+{
+  "name": "catman-app",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@aptabase/web": "^0.5.0",
+    "@capacitor-community/text-to-speech": "^6.1.0",
+    "@capacitor/android": "^7.6.7",
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.6.7",
+    "@capacitor/core": "^7.6.7",
+    "@capacitor/filesystem": "^7.1.8"
+  }
+}

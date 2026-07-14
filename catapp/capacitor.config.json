@@ -1,0 +1,10 @@
+{
+  "appId": "com.kirou.reader",
+  "appName": "KirOu",
+  "webDir": "www",
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
+}
