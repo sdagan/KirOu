@@ -60,6 +60,16 @@ body{margin:0;font-family:'Rubik',sans-serif;background:#dfe4ef;display:flex;jus
 .lempty{text-align:center;color:#7a7690;font-size:14px;padding:30px 10px}
 .lspin{display:inline-block;width:15px;height:15px;border:3px solid rgba(0,0,0,.18);border-top-color:#4a3400;border-radius:50%;animation:lspin .8s linear infinite;vertical-align:-2px;margin-inline-end:6px}
 @keyframes lspin{to{transform:rotate(360deg)}}
+.sbtn{width:100%;font-weight:700;background:#4FA3E3;color:#fff;border:none;border-radius:12px;padding:10px;cursor:pointer;font-family:'Rubik';font-size:15px}
+.report{position:absolute;inset:0;z-index:32;background:rgba(20,16,34,.82);display:none;flex-direction:column;align-items:center;justify-content:center;padding:18px;border-radius:26px}
+.report.show{display:flex}
+.rcard{background:#fff;border-radius:16px;padding:18px;width:100%;max-width:292px;max-height:90%;display:flex;flex-direction:column;gap:12px}
+.rbody{overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.rbook{border:2px solid #20202a;border-radius:12px;padding:11px 13px}
+.rbtitle{font-family:'Suez One';font-size:16px;color:#20202a;margin-bottom:8px}
+.rstat{display:flex;align-items:center;justify-content:space-between;font-size:13px;margin:4px 0;color:#2c2740}
+.rdot{width:12px;height:12px;border-radius:3px;display:inline-block;margin-inline-end:7px;vertical-align:-1px}
+.rnum{font-weight:700}
 </style>
 </head>
 <body>
@@ -82,7 +92,13 @@ body{margin:0;font-family:'Rubik',sans-serif;background:#dfe4ef;display:flex;jus
         <a class="donlink" id="donIL" href="https://links.payboxapp.com/OeINrHUuL4b" target="_blank" rel="noopener"><span class="flag">🇮🇱</span><span id="donILtxt">תשלום באמצעות פייבוקס</span></a>
         <a class="donlink" id="donUS" href="https://venmo.com/code?user_id=2145057738063872116&created=1784025960" target="_blank" rel="noopener"><span class="flag">🇺🇸</span><span id="donUStxt">תשלום באמצעות וונמו</span></a>
         <div class="snote" id="donNote"></div></div>
+      <button class="sbtn" id="reportBtn">כַּרְטִיס הוֹרִים</button>
       <button class="sclose" id="setClose">סְגֹר</button>
+    </div></div>
+    <div class="report" id="report"><div class="rcard">
+      <div class="stitle" id="rTitle">כַּרְטִיס הוֹרִים</div>
+      <div class="rbody" id="rbody"></div>
+      <button class="sclose" id="rClose">סְגֹר</button>
     </div></div>
   </div>
 </div>
@@ -96,10 +112,12 @@ body{margin:0;font-family:'Rubik',sans-serif;background:#dfe4ef;display:flex;jus
     he:{logo:'KirOu',sub:'הַסִּפְרִיָּה שֶׁלִּי',foot:'KirOu · סִפְרֵי קְרִיאָה לִילָדִים',
       setTitle:'הַגְדָּרוֹת',lang:'שָׂפָה',tts:'הַקְרָאָה',note:'לְהַקְרָאָה בְּעִבְרִית יֵשׁ לְהַתְקִין קוֹל עִבְרִי בַּמַּכְשִׁיר.',close:'סְגֹר',donTitle:'תְּמִיכָה',donIL:'תשלום באמצעות פייבוקס',donUS:'תשלום באמצעות וונמו',donNote:'הַכְּסָפִים יְשַׁמְּשׁוּ לְיִצִירַת סְפָרִים חֲדָשִׁים וְלִתְחְזוּקַת הָאַפְּלִיקַצְיָה.',
       read:'קִרְאוּ',dl:'הוֹרָדָה',dling:'מוֹרִיד…',rm:'🗑',empty:'טוֹעֵן סְפָרִים…',noNet:'אֵין חִבּוּר. נַסּוּ שׁוּב מְאֻחָר יוֹתֵר.',dlErr:'הַהוֹרָדָה נִכְשְׁלָה',
+      report:'כַּרְטִיס הוֹרִים',rRead:'עַמּוּדִים שֶׁנִּקְרְאוּ',rFirst:'נָכוֹן מִיָּד',rSecond:'נִסָּיוֹן שֵׁנִי',rNone:'בְּעֶזְרָה',rStars:'כּוֹכָבִים',rEmpty:'עֲדַיִן אֵין נְתוּנִים',
       pl:function(r,t){return 'עַמּוּד '+r+' מִתּוֹךְ '+t;},pn:function(t){return t+' עַמּוּדִים';}},
     en:{logo:'KirOu',sub:'My library',foot:'KirOu · reading books for kids',
       setTitle:'Settings',lang:'Language',tts:'Read aloud',note:'Read-aloud needs a matching voice installed on the device.',close:'Close',donTitle:'Support',donIL:'Pay via Paybox',donUS:'Pay via Venmo',donNote:'Funds go toward creating new books and app maintenance.',
       read:'Read',dl:'Download',dling:'Downloading…',rm:'🗑',empty:'Loading books…',noNet:'No connection. Try again later.',dlErr:'Download failed',
+      report:'Parent report',rRead:'Pages read',rFirst:'Right away',rSecond:'Second try',rNone:'With help',rStars:'Stars',rEmpty:'No data yet',
       pl:function(r,t){return 'Page '+r+' of '+t;},pn:function(t){return t+' pages';}},
   };
   function $(id){return document.getElementById(id);}
@@ -109,6 +127,28 @@ body{margin:0;font-family:'Rubik',sans-serif;background:#dfe4ef;display:flex;jus
   function getInstalled(){try{return JSON.parse(localStorage.getItem('kirou_installed')||'{}');}catch(e){return {};}}
   function setInstalled(o){try{localStorage.setItem('kirou_installed',JSON.stringify(o));}catch(e){}}
   function prog(){try{return JSON.parse(localStorage.getItem('cm_progress')||'{}');}catch(e){return {};}}
+  function loadReport(){try{return JSON.parse(localStorage.getItem('cm_report')||'{}');}catch(e){return {};}}
+  function loadStars(){try{return JSON.parse(localStorage.getItem('cm_stars')||'{}');}catch(e){return {};}}
+  function esc(t){return (t==null?'':''+t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function openReport(){
+    var rep=loadReport(),stars=loadStars(),s=L[LANG],body=$('rbody');
+    $('rTitle').textContent=s.report;$('rClose').textContent=s.close;
+    var titleOf={},pagesOf={};(CATALOG.books||[]).forEach(function(b){titleOf[b.id]=(b.title&&(b.title[LANG]||b.title.he))||b.id;pagesOf[b.id]=b.pages;});
+    var keys=Object.keys(rep);
+    if(!keys.length){body.innerHTML='<div class="lempty">'+esc(s.rEmpty)+'</div>';$('report').classList.add('show');return;}
+    body.innerHTML=keys.map(function(id){
+      var pg=rep[id]||{},f=0,sec=0,n=0,p;for(p in pg){if(pg[p]==='first')f++;else if(pg[p]==='second')sec++;else n++;}
+      var st=stars[id]||{},starSum=0,k;for(k in st)starSum+=st[k]||0;
+      var read=f+sec+n,total=pagesOf[id];
+      return '<div class="rbook"><div class="rbtitle">'+esc(titleOf[id]||id)+'</div>'
+        +'<div class="rstat"><span>'+esc(s.rRead)+'</span><span class="rnum">'+read+(total?(' / '+total):'')+'</span></div>'
+        +'<div class="rstat"><span><span class="rdot" style="background:#12b26a"></span>'+esc(s.rFirst)+'</span><span class="rnum">'+f+'</span></div>'
+        +'<div class="rstat"><span><span class="rdot" style="background:#FFB300"></span>'+esc(s.rSecond)+'</span><span class="rnum">'+sec+'</span></div>'
+        +'<div class="rstat"><span><span class="rdot" style="background:#e24b4a"></span>'+esc(s.rNone)+'</span><span class="rnum">'+n+'</span></div>'
+        +'<div class="rstat"><span>⭐ '+esc(s.rStars)+'</span><span class="rnum">'+starSum+'</span></div></div>';
+    }).join('');
+    $('report').classList.add('show');
+  }
   function bytesToB64(u8){var CH=0x8000,s='';for(var i=0;i<u8.length;i+=CH){s+=String.fromCharCode.apply(null,u8.subarray(i,i+CH));}return btoa(s);}
 
   var CATALOG={books:[]};
@@ -162,6 +202,7 @@ body{margin:0;font-family:'Rubik',sans-serif;background:#dfe4ef;display:flex;jus
     document.querySelector('.foot').textContent=s.foot;
     $('setTitle').textContent=s.setTitle;$('langLabel').textContent=s.lang;$('ttsLabel').textContent=s.tts;$('ttsNote').textContent=s.note;$('setClose').textContent=s.close;
     $('donLabel').textContent=s.donTitle;$('donILtxt').textContent=s.donIL;$('donUStxt').textContent=s.donUS;$('donNote').textContent=s.donNote;
+    $('reportBtn').textContent=s.report;
     $('segHe').classList.toggle('on',LANG==='he');$('segEn').classList.toggle('on',LANG==='en');
     $('ttsSw').classList.toggle('on',TTS);
     var lib=$('library'),inst=getInstalled(),pr=prog();
@@ -183,6 +224,8 @@ body{margin:0;font-family:'Rubik',sans-serif;background:#dfe4ef;display:flex;jus
   }
   $('gear').onclick=function(){$('settings').classList.add('show');};
   $('setClose').onclick=function(){$('settings').classList.remove('show');};
+  $('reportBtn').onclick=openReport;
+  $('rClose').onclick=function(){$('report').classList.remove('show');};
   $('segHe').onclick=function(){LANG='he';localStorage.setItem('cm_lang','he');render();};
   $('segEn').onclick=function(){LANG='en';localStorage.setItem('cm_lang','en');render();};
   $('ttsSw').onclick=function(){TTS=!TTS;localStorage.setItem('cm_tts',TTS?'1':'0');render();};
